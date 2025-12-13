@@ -1,4 +1,13 @@
-import { Sounds } from "@rbxts/sound-manager";
+import { createSoundRegistry } from "@rbxts/sound-manager";
 
-Sounds.load("TestSound", "rbxassetid://4714389545", { volume: 1, loop: false });     
-Sounds.play("TestSound")
+const Sounds = createSoundRegistry({
+    SCP096: {
+        id: "rbxassetid://4714389545",
+        volume: 1,
+        loop: false,
+    } 
+});
+
+Sounds.preloadAll();
+
+Sounds.play("SCP096");
