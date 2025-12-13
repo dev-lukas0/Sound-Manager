@@ -116,7 +116,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     }
 
     /**
-     * 
+     * Reset a Sound
      * @param sound Sound Instance
      */
     function reset(sound: SoundName) {
@@ -127,7 +127,19 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     }
 
     /**
-     * 
+     * Reset every Sound
+     * @param sound Sound Instance
+     */
+    function resetAll(sound: SoundName) {
+        for (const sound of folder.GetChildren()) {
+            if (sound.IsA("Sound")) {
+                sound.TimePosition = 0;
+            }
+        }
+    }
+
+    /**
+     * Set Time Position
      * @param sound Sound Instance
      * @param timePosition Time Position
      */
@@ -136,6 +148,22 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         if (!sound) return;
 
         _sound.TimePosition = timePosition;
+    }
+
+    /**
+     * Stop every Sound
+     * @param reset Define whether every Sound should also be reset?
+     */
+    function stopAll(reset?: true) {
+        for (const instance of folder.GetChildren()) {
+            if (!instance.IsA("Sound")) continue;
+
+            instance.Stop();
+
+            if (reset) {
+                instance.TimePosition = 0;
+            }
+        }
     }
 
 
@@ -148,5 +176,6 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         fadeOut,
         reset,
         setTimePosition,
+        stopAll,
     }
 }
