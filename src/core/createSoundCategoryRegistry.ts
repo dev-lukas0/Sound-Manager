@@ -45,8 +45,29 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Play every Sound from a Sound Category
+     * @param name Sound Category
+     */
+    function playCategory<C extends SoundCategory>(name: C) {
+        loadCategory(name);
+        const config = definitions[name];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+
+        const folder = ReplicatedStorage.FindFirstChild(config.category as string) as Folder;
+        for (const [sound] of pairs(config.sounds)) {
+            const _sound = folder.FindFirstChild(sound as string);
+            if (!_sound) continue;
+            if (_sound?.IsA("Sound")) {
+                _sound.Play();
+            }
+        }
+    }
+
 
     return {
         loadCategory,
+        playCategory,
     }
 }
