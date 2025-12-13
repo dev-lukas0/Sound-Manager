@@ -1,9 +1,8 @@
 import { SoundOptions } from "./options";
 
 /**
- * 
+ * Create a sound Registry
  * @param definitions Define the Sounds
- * @returns 
  */
 export function createSoundRegistry<T extends Record<string, SoundOptions>>(definitions: T) {
     type SoundName = keyof T;
@@ -20,7 +19,6 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Loads a Sound
      * @param name Define which Sound should be loaded
-     * @returns 
      */
     function load(name: SoundName) {
         if (folder.FindFirstChild(name as string)) return;
@@ -166,6 +164,47 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         }
     }
 
+    /**
+     * Set Sound Volume
+     * @param sound Sound Instance
+     * @param volume Sound Volume
+     */
+    function setVolume(sound: SoundName, volume: number) {
+        const _sound = folder.FindFirstChild(sound as string) as Sound;
+        if (!sound) return;
+
+        _sound.Volume = volume;
+    }
+
+    /**
+     * Set the global Sound Volume
+     * @param volume Sound Volume
+     */
+    function setGlobalVolume(volume: number) {
+        for (const instance of folder.GetChildren()) {
+            if (!instance.IsA("Sound")) continue;
+
+            if (instance.IsA("Sound")) {
+                instance.Volume = volume;
+            };
+        }
+    }
+
+    /**
+     * Plays Sound on Event Callback
+     * @param name Sound Name
+     * @param callback Callback
+     */
+    function onEnd(sound: SoundName, callback: () => void) {}
+
+    /**
+     * Preloads a Sound
+     * @param sound Sound Instance
+     */
+    function preload(sound: SoundName) {
+        load(sound);
+    }
+
 
     return {
         play,
@@ -177,5 +216,9 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         reset,
         setTimePosition,
         stopAll,
+        preload,
+        setGlobalVolume,
+        setVolume,
+        //onEnd,
     }
 }
