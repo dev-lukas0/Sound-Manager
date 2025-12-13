@@ -18,7 +18,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     }
 
     /**
-     * 
+     * Loads a Sound
      * @param name Define which Sound should be loaded
      * @returns 
      */
@@ -36,7 +36,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     }
 
     /**
-     * 
+     * Plays a Sound
      * @param name Define which Sound should be played
      */
     function play(name: SoundName) {
@@ -46,7 +46,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     }
 
     /**
-     * 
+     * Stops a Sound
      * @param name Define which Sound should be stopped
      */
     function stop(name: SoundName) {
@@ -63,10 +63,90 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         }
     }
 
+    /**
+     * Smoothly fad in a sound
+     * @param soundName Sound Instance
+     * @param duration Time in Seconds
+     * @param volume Volume
+     */
+    function fadeIn(soundName: SoundName, duration: number, volume: number) {
+        const sound = folder.FindFirstChild(soundName as string) as Sound;
+        sound.Volume = 0;
+        sound.Play();
+
+        const step = 0.05;
+        const interval = duration * step;
+
+        task.spawn(() => {
+            let vol = 0;
+            while (vol < volume) {
+                vol += step;
+                sound.Volume = math.clamp(vol, 0, volume)
+                task.wait(interval);
+            }
+        })
+    }
+
+    /**
+     * Smoothly fade out a sound
+     * @param soundName Sound name from Registry
+     * @param duration Time in seconds
+     * @param targetVolume Optional target volume (default 0)
+     */
+    function fadeOut(soundName: SoundName, duration: number, targetVolume?: number) {
+        const sound = folder.FindFirstChild(soundName as string) as Sound;
+        if (!sound) return;
+
+        const startVolume = sound.Volume;
+        const endVolume = targetVolume ?? 0;
+
+        const step = 0.05;
+        const interval = duration * step;
+
+        task.spawn(() => {
+            let vol = startVolume;
+            while (vol > endVolume) {
+                vol = math.clamp(vol - step, endVolume, startVolume);
+                sound.Volume = vol;
+                task.wait(interval);
+            }
+            sound.Volume = endVolume;
+            if (endVolume === 0) sound.Stop();
+        });
+    }
+
+    /**
+     * 
+     * @param sound Sound Instance
+     */
+    function reset(sound: SoundName) {
+        const _sound = folder.FindFirstChild(sound as string) as Sound;
+        if (!sound) return;
+
+        _sound.TimePosition = 0;
+    }
+
+    /**
+     * 
+     * @param sound Sound Instance
+     * @param timePosition Time Position
+     */
+    function setTimePosition(sound: SoundName, timePosition: number) {
+        const _sound = folder.FindFirstChild(sound as string) as Sound;
+        if (!sound) return;
+
+        _sound.TimePosition = timePosition;
+    }
+
+
     return {
         play,
         stop,
         preloadAll,
         load,
+        fadeIn,
+        fadeOut,
+        reset,
+        setTimePosition,
     }
 }
