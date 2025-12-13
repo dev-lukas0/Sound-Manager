@@ -3,10 +3,10 @@
 A Roblox sound management library built with Roblox-TS
 
 ## Getting Started
-To use the Sound Manager library in your Roblox-TS project install it via npm:
+To use the Sound Manager library in your Roblox-TS project, install it via npm:
 ```bash
-   npm install @rbxts/sound-manager
-   ```
+npm install @rbxts/sound-manager
+```
 
 Example usage:
 ```typescript
