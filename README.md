@@ -25,5 +25,43 @@ Sounds.preloadAll();
 Sounds.play("SCP096");
 ```
 
+## Roadmap
+
+### Core API
+- [x] load
+- [x] play
+- [x] stop / stopAll
+- [x] preload / preloadAll
+- [x] fadeIn / fadeOut
+- [x] reset / resetAll
+- [x] setTimePosition
+- [x] setVolume / setGlobalVolume
+- [x] onEnd
+- [ ] isPlaying
+
+### Development Utilities
+- [ ] Total Sound Count function
+- [ ] Currently Playing Sounds function
+- [ ] Sound Instance Getter function
+- [ ] Sound Properties Getter function
+
+### Category API
+- [x] playCategory
+- [ ] stopCategory / stopAllCategories
+- [ ] setCategoryVolume / setGlobalCategoryVolume
+- [ ] fadeInCategory / fadeOutCategory
+- [ ] preloadCategory / preloadAllCategories
+- [ ] isCategoryPlaying
+- [ ] onCategoryEnd
+- [ ] resetCategory / resetAllCategories
+- [ ] playSoundFromCategory
+
+### Features
+- [x] Sound Autocompletion
+- [ ] Sound Categories
+- [ ] Sound Creation functions
+- [ ] Sound Priority
+
+
 For more Details:
 https://dev-lukas0.github.io/Sound-Manager-Docs/
