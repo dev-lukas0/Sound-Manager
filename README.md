@@ -48,7 +48,7 @@ Sounds.play("SCP096");
 ### Category API
 - [x] playCategory
 - [x] stopCategory / stopAllCategories
-- [ ] setCategoryVolume / setGlobalCategoryVolume
+- [x] setCategoryVolume / setGlobalCategoryVolume
 - [ ] fadeInCategory / fadeOutCategory
 - [ ] preloadCategory / preloadAllCategories
 - [x] isCategoryPlaying
