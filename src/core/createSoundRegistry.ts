@@ -191,7 +191,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     }
 
     /**
-     * Plays Sound on Event Callback
+     * Does something on Sound end
      * @param name Sound Name
      * @param callback Callback
      */

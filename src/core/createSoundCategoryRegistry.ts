@@ -337,6 +337,36 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Does something on Category end
+     * @param category Sound Category
+     * @param callback Callback
+     */
+    function onCategoryEnd<C extends SoundCategory>(category: C, callback: () => void) {
+        const config = definitions[category];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return;
+
+        const sounds = categoryFolder.GetChildren().filter(s => s.IsA("Sound")) as Sound[];
+        if (sounds.size() === 0) return;
+
+        let remaining = sounds.size();
+
+        for (const sound of sounds) {
+            sound.Ended.Connect(() => {
+                remaining -= 1;
+                if (remaining <= 0) {
+                    callback(); 
+                }
+            });
+        }
+    }
+
 
     return {
         loadCategory,
@@ -353,5 +383,6 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         preloadCategory,
         fadeInCategory,
         fadeOutCategory,
+        onCategoryEnd,
     }
 }
