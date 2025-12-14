@@ -246,6 +246,23 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Preloads a Sound Category
+     * @param category Sound Category
+     */
+    function preloadCategory<C extends SoundCategory>(category: C) {
+        loadCategory(category);
+    }
+
+    /**
+     * Preloads every Sound Category
+     */
+    function preloadAllCategories() {
+        for (const [category] of pairs(definitions)) {
+            loadCategory(category as SoundCategory);
+        }
+    }
+
 
     return {
         loadCategory,
@@ -258,5 +275,7 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         playSoundFromCategory,
         resetCategory,
         resetAllCategories,
+        preloadAllCategories,
+        preloadCategory,
     }
 }
