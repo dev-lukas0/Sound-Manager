@@ -153,6 +153,33 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Whether a Category is playing or not
+     * @param category Sound Category
+     * @returns Whether a Category is playing or not
+     */
+    function isCategoryPlaying<C extends SoundCategory>(category: C): boolean {
+        const config = definitions[category];
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return false;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return false;
+
+        const sounds = categoryFolder.GetChildren().filter(sound => sound.IsA("Sound")) as Sound[];
+        if (sounds.size() === 0) return false;
+
+        for (const sound of sounds) {
+            if (!sound.IsPlaying) {
+                return false;
+            }
+        }
+
+        return true; 
+    }
+
 
     return {
         loadCategory,
@@ -161,5 +188,6 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         stopAllCategories,
         setCategoryVolume,
         setGlobalCategoryVolume,
+        isCategoryPlaying,
     }
 }
