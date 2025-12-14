@@ -210,6 +210,20 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         load(sound);
     }
 
+    /**
+     * Check whether a Sound is playing
+     * @param sound Sound Instance
+     * @returns Boolean
+     */
+    function isPlaying(sound: SoundName): boolean {
+        const _sound = folder.WaitForChild(sound as string) as Sound;
+        if (_sound.IsPlaying === true) {
+            return true;
+        } else {
+            return false;
+        }
+    }   
+
 
     return {
         play,
@@ -226,5 +240,6 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         setVolume,
         resetAll,
         onEnd,
+        isPlaying,
     }
 }
