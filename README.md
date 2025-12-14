@@ -54,7 +54,7 @@ Sounds.play("SCP096");
 - [x] isCategoryPlaying
 - [ ] onCategoryEnd
 - [ ] resetCategory / resetAllCategories
-- [ ] playSoundFromCategory
+- [x] playSoundFromCategory
 
 ### Features
 - [x] Sound Autocompletion
