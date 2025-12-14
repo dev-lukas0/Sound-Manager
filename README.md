@@ -58,7 +58,7 @@ Sounds.play("SCP096");
 
 ### Features
 - [x] Sound Autocompletion
-- [ ] Sound Categories
+- [x] Sound Categories
 - [ ] Sound Creation functions
 - [ ] Sound Priority
 
