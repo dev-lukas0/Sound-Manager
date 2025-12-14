@@ -24,3 +24,6 @@ Sounds.preloadAll();
 
 Sounds.play("SCP096");
 ```
+
+For more Details:
+https://dev-lukas0.github.io/Sound-Manager-Docs/
