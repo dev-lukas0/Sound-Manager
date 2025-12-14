@@ -90,10 +90,31 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Stops every Sound from every Sound Category
+     */
+    function stopAllCategories() {
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        for (const category of soundsFolder.GetChildren()) {
+            if (!category.IsA("Folder")) continue;
+
+            for (const sound of category.GetChildren()) {
+                if (!sound.IsA("Sound")) continue;
+
+                sound.Stop();
+            }
+        }
+    }
+
 
     return {
         loadCategory,
         playCategory,
         stopCategory,
+        stopAllCategories,
     }
 }
