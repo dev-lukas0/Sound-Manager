@@ -180,6 +180,11 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         return true; 
     }
 
+    /**
+     * Play a Sound from a Category
+     * @param category Sound Category
+     * @param sound Sound Instance
+     */
     function playSoundFromCategory<C extends SoundCategory, S extends keyof T[C]["sounds"]>(category: C, sound: S) {
         loadCategory(category);
 
@@ -198,6 +203,49 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Reset a Sound Category Timeposition to 0
+     * @param category Sound Category
+     */
+    function resetCategory<C extends SoundCategory>(category: C) {
+        const config = definitions[category];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return;
+
+        for (const sound of categoryFolder.GetChildren()) {
+            if (!sound.IsA("Sound")) continue;
+
+            sound.TimePosition = 0;
+        }
+    }
+
+    /**
+     * Resets every Sound from every Sound Category
+     * @param category Sound Category
+     */
+    function resetAllCategories<C extends SoundCategory>(category: C) {
+        const config = definitions[category];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        for (const folder of soundsFolder.GetChildren()) {
+            if (!folder.IsA("Folder")) continue;
+
+            for (const sound of folder.GetChildren()) {
+                if (!sound.IsA("Sound")) continue;
+
+                sound.TimePosition = 0;
+            }
+        }
+    }
+
 
     return {
         loadCategory,
@@ -208,5 +256,7 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         setGlobalCategoryVolume,
         isCategoryPlaying,
         playSoundFromCategory,
+        resetCategory,
+        resetAllCategories,
     }
 }
