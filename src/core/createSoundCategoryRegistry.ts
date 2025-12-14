@@ -263,6 +263,80 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Smoothly fade in a Sound Category
+     * @param category Sound Category
+     * @param duration Duration
+     * @param volume Volume
+     */
+    function fadeInCategory<C extends SoundCategory>(category: C, duration: number, volume: number) {
+        const config = definitions[category];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return;
+
+        for (const sound of categoryFolder.GetChildren()) {
+            if (!sound.IsA("Sound")) continue;
+
+            sound.Volume = 0;
+            sound.Play();
+
+            const step = 0.05;
+            const interval = duration * step;
+
+            task.spawn(() => {
+                let vol = 0;
+                while (vol < volume) {
+                    vol += step;
+                    sound.Volume = math.clamp(vol, 0, volume)
+                    task.wait(interval);
+                }
+            })
+        }
+    }
+
+    /**
+     * Smoothly fade out a Sound Category
+     * @param category Sound Category
+     * @param duration Duration
+     * @param targetVolume Target Volume
+     */
+    function fadeOutCategory<C extends SoundCategory>(category: C, duration: number, targetVolume?: number) {
+        const config = definitions[category];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return;
+
+        for (const sound of categoryFolder.GetChildren()) {
+            if (!sound.IsA("Sound")) continue;
+
+            const startVolume = sound.Volume;
+            const endVolume = targetVolume ?? 0;
+
+            const step = 0.05;
+            const interval = duration * step;
+
+            task.spawn(() => {
+                let vol = startVolume;
+                while (vol > endVolume) {
+                    vol = math.clamp(vol - step, endVolume, startVolume);
+                    sound.Volume = vol;
+                    task.wait(interval);
+                }
+                sound.Volume = endVolume;
+                if (endVolume === 0) sound.Stop();
+            });
+        }
+    }
+
 
     return {
         loadCategory,
@@ -277,5 +351,7 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         resetAllCategories,
         preloadAllCategories,
         preloadCategory,
+        fadeInCategory,
+        fadeOutCategory,
     }
 }

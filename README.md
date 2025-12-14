@@ -49,7 +49,7 @@ Sounds.play("SCP096");
 - [x] playCategory
 - [x] stopCategory / stopAllCategories
 - [x] setCategoryVolume / setGlobalCategoryVolume
-- [ ] fadeInCategory / fadeOutCategory
+- [x] fadeInCategory / fadeOutCategory
 - [x] preloadCategory / preloadAllCategories
 - [x] isCategoryPlaying
 - [ ] onCategoryEnd
