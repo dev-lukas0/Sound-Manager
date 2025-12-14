@@ -37,7 +37,7 @@ Sounds.play("SCP096");
 - [x] setTimePosition
 - [x] setVolume / setGlobalVolume
 - [x] onEnd
-- [ ] isPlaying
+- [x] isPlaying
 
 ### Development Utilities
 - [ ] Total Sound Count function
