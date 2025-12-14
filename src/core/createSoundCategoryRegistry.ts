@@ -57,13 +57,36 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         if (!soundsFolder) return;
 
         const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
-    if (!categoryFolder) return;
-        for (const [sound] of pairs(config.sounds)) {
-            const _sound = categoryFolder.FindFirstChild(sound as string);
-            if (!_sound) continue;
-            if (_sound?.IsA("Sound")) {
-                _sound.Play();
-            }
+        if (!categoryFolder) return;
+            for (const [sound] of pairs(config.sounds)) {
+                const _sound = categoryFolder.FindFirstChild(sound as string);
+                if (!_sound) continue;
+                if (_sound?.IsA("Sound")) {
+                    _sound.Play();
+                }
+        }
+    }
+
+    /**
+     * Stop every Sound from a Sound Category
+     * @param name Sound Category
+     */
+    function stopCategory<C extends SoundCategory>(name: C) {
+        const config = definitions[name];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return;
+            for (const [sound] of pairs(config.sounds)) {
+                const _sound = categoryFolder.FindFirstChild(sound as string);
+                if (!_sound) continue;
+                if (_sound?.IsA("Sound")) {
+                    _sound.Stop();
+                }
         }
     }
 
@@ -71,5 +94,6 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
     return {
         loadCategory,
         playCategory,
+        stopCategory,
     }
 }
