@@ -62,7 +62,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     }
 
     /**
-     * Smoothly fad in a sound
+     * Smoothly fade in a sound
      * @param soundName Sound Instance
      * @param duration Time in Seconds
      * @param volume Volume
