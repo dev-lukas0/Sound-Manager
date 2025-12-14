@@ -180,6 +180,24 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         return true; 
     }
 
+    function playSoundFromCategory<C extends SoundCategory, S extends keyof T[C]["sounds"]>(category: C, sound: S) {
+        loadCategory(category);
+
+        const config = definitions[category];
+
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return;
+
+        const soundInstance = categoryFolder.FindFirstChild(sound as string) as Sound;
+        if (soundInstance?.IsA("Sound")) {
+            soundInstance.Play();
+        }
+    }
+
 
     return {
         loadCategory,
@@ -189,5 +207,6 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         setCategoryVolume,
         setGlobalCategoryVolume,
         isCategoryPlaying,
+        playSoundFromCategory,
     }
 }
