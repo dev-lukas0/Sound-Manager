@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/sound-manager",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "A sound manager for Roblox-Typescript projects.",
   "main": "out/init.lua",
   "scripts": {
