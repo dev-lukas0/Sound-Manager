@@ -1,3 +1,4 @@
+import { SoundService } from "@rbxts/services";
 import { createSoundCategoryRegistry } from "@rbxts/sound-manager";
 
 const SoundCategories = createSoundCategoryRegistry({
@@ -21,3 +22,13 @@ const SoundCategories = createSoundCategoryRegistry({
 
 task.wait(5);
 SoundCategories.playCategory("SCP096");
+task.wait(3);
+SoundCategories.stopCategory("SCP096");
+task.wait(2);
+SoundCategories.fadeInCategory("SCP096", 3, 1);
+print(SoundCategories.isCategoryPlaying("SCP096"));
+task.wait(3);
+SoundCategories.fadeOutCategory("SCP096", 3);
+task.wait(3);
+SoundCategories.stopCategory("SCP096");
+print(SoundCategories.isCategoryPlaying("SCP096"));

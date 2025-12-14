@@ -8,7 +8,7 @@ const Sounds = createSoundRegistry({
     } 
 });
 
-Sounds.preloadAll();
+
 Sounds.play("SCP096");
 task.wait(3);
 Sounds.stop("SCP096");
