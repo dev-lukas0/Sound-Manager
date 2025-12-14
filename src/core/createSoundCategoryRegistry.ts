@@ -21,8 +21,6 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
      * @param name Define which Sound Category should be loaded
      */
     function loadCategory(name: SoundCategory) {
-        if (folder.FindFirstChild(name as string)) return;
-
         const config = definitions[name];
 
         let category = folder.FindFirstChild(config.category as string) as Folder;
@@ -55,9 +53,13 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
 
         const ReplicatedStorage = game.GetService("ReplicatedStorage");
 
-        const folder = ReplicatedStorage.FindFirstChild(config.category as string) as Folder;
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+    if (!categoryFolder) return;
         for (const [sound] of pairs(config.sounds)) {
-            const _sound = folder.FindFirstChild(sound as string);
+            const _sound = categoryFolder.FindFirstChild(sound as string);
             if (!_sound) continue;
             if (_sound?.IsA("Sound")) {
                 _sound.Play();
