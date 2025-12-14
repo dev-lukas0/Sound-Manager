@@ -195,7 +195,12 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @param name Sound Name
      * @param callback Callback
      */
-    function onEnd(sound: SoundName, callback: () => void) {}
+    function onEnd(sound: SoundName, callback: () => void) {
+        const _sound = folder.WaitForChild(sound as string) as Sound;
+        if (!_sound) return;
+
+        _sound.Ended.Connect(callback);
+    }
 
     /**
      * Preloads a Sound
@@ -219,6 +224,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         preload,
         setGlobalVolume,
         setVolume,
-        //onEnd,
+        resetAll,
+        onEnd,
     }
 }
