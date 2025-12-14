@@ -53,7 +53,7 @@ Sounds.play("SCP096");
 - [ ] preloadCategory / preloadAllCategories
 - [x] isCategoryPlaying
 - [ ] onCategoryEnd
-- [ ] resetCategory / resetAllCategories
+- [x] resetCategory / resetAllCategories
 - [x] playSoundFromCategory
 
 ### Features
