@@ -110,11 +110,56 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
         }
     }
 
+    /**
+     * Set the Volume of a Sound Category
+     * @param category Sound Category
+     * @param volume Volume
+     */
+    function setCategoryVolume<C extends SoundCategory>(category: C, volume: number) {
+        const config = definitions[category];
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        if (!categoryFolder) return;
+
+        for (const sound of categoryFolder.GetChildren()) {
+            if (!sound.IsA("Sound")) continue;
+
+            sound.Volume = volume;
+        }
+    }
+
+    /**
+     * Set the Global Volume of every Sound Category
+     * @param volume Volume
+     */
+    function setGlobalCategoryVolume(volume: number) {
+        const ReplicatedStorage = game.GetService("ReplicatedStorage");
+
+        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
+        if (!soundsFolder) return;
+
+        for (const category of soundsFolder.GetChildren()) {
+            if (!category.IsA("Folder")) continue;
+
+            for (const sound of category.GetChildren()) {
+                if (!sound.IsA("Sound")) continue;
+
+                sound.Volume = volume;
+            } 
+        }
+    }
+
 
     return {
         loadCategory,
         playCategory,
         stopCategory,
         stopAllCategories,
+        setCategoryVolume,
+        setGlobalCategoryVolume,
     }
 }
