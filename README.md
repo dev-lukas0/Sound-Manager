@@ -61,6 +61,7 @@ Sounds.play("SCP096");
 - [x] Sound Categories
 - [ ] Sound Creation functions
 - [ ] Sound Priority
+- [ ] Implement the new Roblox Sound API
 
 
 For more Details:
