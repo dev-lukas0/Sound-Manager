@@ -35,8 +35,8 @@ export function createSpatialHandle(assetId: string, emitters: BasePart[], volum
             player.Stop()
         },
 
-        fadeIn(duration: number) {
-            fadeIn(player, 1, duration)
+        fadeIn(duration: number, volume: number) {
+            fadeIn(player, volume, duration)
         },
 
         fadeOut(duration: number) {

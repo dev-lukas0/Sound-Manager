@@ -1,4 +1,4 @@
-import { SoundHandle, SoundOptions } from "./options";
+import { SoundOptions } from "./options";
 import { createSpatialHandle } from "./createSpatialHandle";
 
 /**
@@ -37,7 +37,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Plays a Sound
      * @param name Define which Sound should be played
-     * @param spatial Arry of Baseparts
+     * @param spatial Array of Baseparts
      */
     function play(name: SoundName, spatial?: { emitters: BasePart[] }) {
         const config = definitions[name];
@@ -50,17 +50,26 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             const emittersArray = spatial.emitters;
             const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
             handle.play();
-            return handle;
         }
     }
 
     /**
      * Stops a Sound
      * @param name Define which Sound should be stopped
+     * @param spatial Array of Baseparts
      */
-    function stop(name: SoundName) {
-        const sound = folder.FindFirstChild(name as string) as Sound;
-        sound?.Stop();
+    function stop(name: SoundName, spatial?: { emitters: BasePart[] }) {
+        const config = definitions[name];
+
+        if (!spatial || !spatial.emitters) {
+            const sound = folder.FindFirstChild(name as string) as Sound;
+            sound?.Stop();
+        } else {
+            const emittersArray = spatial.emitters;
+            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+            handle.destroy();
+        }
+
     }
 
     /**
@@ -77,23 +86,31 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @param soundName Sound Instance
      * @param duration Time in Seconds
      * @param volume Volume
+     * @param spatial Array of Baseparts
      */
-    function fadeIn(soundName: SoundName, duration: number, volume: number) {
-        const sound = folder.FindFirstChild(soundName as string) as Sound;
-        sound.Volume = 0;
-        sound.Play();
+    function fadeIn(soundName: SoundName, duration: number, volume: number, spatial?: { emitters: BasePart[] }) {
+        const config = definitions[soundName];
+        if (!spatial || !spatial.emitters) {
+            const sound = folder.FindFirstChild(soundName as string) as Sound;
+            sound.Volume = 0;
+            sound.Play();
 
-        const step = 0.05;
-        const interval = duration * step;
+            const step = 0.05;
+            const interval = duration * step;
 
-        task.spawn(() => {
-            let vol = 0;
-            while (vol < volume) {
-                vol += step;
-                sound.Volume = math.clamp(vol, 0, volume)
-                task.wait(interval);
-            }
-        })
+            task.spawn(() => {
+                let vol = 0;
+                while (vol < volume) {
+                    vol += step;
+                    sound.Volume = math.clamp(vol, 0, volume)
+                    task.wait(interval);
+                }
+            })
+        } else {
+            const emittersArray = spatial.emitters;
+            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+            handle.fadeIn?.(duration, volume);
+        }
     }
 
     /**
@@ -101,27 +118,35 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @param soundName Sound name from Registry
      * @param duration Time in seconds
      * @param targetVolume Optional target volume (default 0)
+     * @param spatial Array of Baseparts
      */
-    function fadeOut(soundName: SoundName, duration: number, targetVolume?: number) {
-        const sound = folder.FindFirstChild(soundName as string) as Sound;
-        if (!sound) return;
+    function fadeOut(soundName: SoundName, duration: number, targetVolume?: number, spatial?: { emitters: BasePart[] }) {
+        const config = definitions[soundName];
+        if (!spatial || !spatial.emitters) {
+            const sound = folder.FindFirstChild(soundName as string) as Sound;
+            if (!sound) return;
 
-        const startVolume = sound.Volume;
-        const endVolume = targetVolume ?? 0;
+            const startVolume = sound.Volume;
+            const endVolume = targetVolume ?? 0;
 
-        const step = 0.05;
-        const interval = duration * step;
+            const step = 0.05;
+            const interval = duration * step;
 
-        task.spawn(() => {
-            let vol = startVolume;
-            while (vol > endVolume) {
-                vol = math.clamp(vol - step, endVolume, startVolume);
-                sound.Volume = vol;
-                task.wait(interval);
-            }
-            sound.Volume = endVolume;
-            if (endVolume === 0) sound.Stop();
-        });
+            task.spawn(() => {
+                let vol = startVolume;
+                while (vol > endVolume) {
+                    vol = math.clamp(vol - step, endVolume, startVolume);
+                    sound.Volume = vol;
+                    task.wait(interval);
+                }
+                sound.Volume = endVolume;
+                if (endVolume === 0) sound.Stop();
+            });
+        } else {
+            const emittersArray = spatial.emitters;
+            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+            handle.fadeOut?.(duration);
+        }
     }
 
     /**
@@ -179,12 +204,19 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * Set Sound Volume
      * @param sound Sound Instance
      * @param volume Sound Volume
+     * @param spatial Array of Baseparts
      */
-    function setVolume(sound: SoundName, volume: number) {
-        const _sound = folder.FindFirstChild(sound as string) as Sound;
-        if (!sound) return;
+    function setVolume(sound: SoundName, volume: number, spatial?: { emitters: BasePart[] }) {
+        const config = definitions[sound];
+        if (!spatial || spatial.emitters) {
+            const _sound = folder.FindFirstChild(sound as string) as Sound;
+            if (!sound) return;
 
-        _sound.Volume = volume;
+            _sound.Volume = volume;
+        } else {
+            const emittersArray = spatial.emitters;
+            const handle = createSpatialHandle(config.id, emittersArray, volume);
+        }
     }
 
     /**

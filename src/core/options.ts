@@ -11,7 +11,7 @@ export interface SoundOptions {
 export interface SoundHandle {
     play(): void;
     stop(): void;
-    fadeIn?(duration: number): void;
+    fadeIn?(duration: number, volume: number): void;
     fadeOut?(duration: number): void;
     destroy(): void;
 }
