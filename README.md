@@ -81,5 +81,6 @@ See the [Roadmap](./Roadmap.md) for planned features and current progress.
 **Sound Manager** is licensed under the [MIT LICENSE](./LICENSE).
 
 &nbsp;
+
 For more Details:
 https://dev-lukas0.github.io/Sound-Manager-Docs/
