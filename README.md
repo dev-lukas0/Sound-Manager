@@ -1,6 +1,6 @@
 # Sound Manager
 
-![npm](https://img.shields.io/npm/dt/@rbxts/sound-manager?style=flat-square)
+# ![npm](https://img.shields.io/npm/dt/@rbxts/sound-manager?style=flat-square) #
 
 A Roblox sound management library built with Roblox-TS
 
