@@ -4,23 +4,45 @@
 	</a>
 	<br />
 	<b>Sound Manager</b>
+    
 </h1>
 
-
-## Sound Manager
+<div align="center">
 
 ![npm](https://img.shields.io/npm/dt/@rbxts/sound-manager?style=flat-square) ![npm](https://img.shields.io/npm/v/@rbxts/sound-manager?style=flat-square) ![GitHub](https://img.shields.io/github/license/dev-lukas0/Sound-Manager?style=flat-square)
 
-A Roblox sound management library built with Roblox-TS
+</div>
 
-## Getting Started
+---
+
+&nbsp;
+
+
+## 🔉 Sound Manager
+
+**Sound Manager** is a roblox sound-management library built with Roblox-TS, designed to simplify sound handling in your roblox projects.
+
+&nbsp;
+
+## 📦 Installation
+
 To use the Sound Manager library in your Roblox-TS project, install it via npm:
+
 ```bash
 npm install @rbxts/sound-manager
 ```
 
-Example usage:
-```typescript
+&nbsp;
+
+## 🚀 Quick Start
+
+[See the Documentation ->](https://dev-lukas0.github.io/Sound-Manager-Docs/)
+
+### ⚡ Starting with Sound Manager
+
+Sound-Manager uses [`createSoundRegistry`]() and [`createSoundCategoryRegistry`]() to create sounds and categories.
+
+```ts
 import { createSoundRegistry } from "@rbxts/sound-manager";
 
 const Sounds = createSoundRegistry({
@@ -28,52 +50,36 @@ const Sounds = createSoundRegistry({
         id: "rbxassetid://4714389545",
         volume: 1,
         loop: false,
-    } 
+    },
+
+    Test: {
+        id: "rbxassetid://17771398985",
+        volume: 1,
+        loop: true,
+    }
 });
+```
 
-Sounds.preloadAll();
+### 🎵 Playing Sounds
 
+To play a sound, you can use the [`play`](https://dev-lukas0.github.io/Sound-Manager-Docs/docs/API/play) method on the sound registry:
+
+```ts
 Sounds.play("SCP096");
 ```
 
-## Roadmap
+&nbsp;
 
-### Core API
-- [x] load
-- [x] play
-- [x] stop / stopAll
-- [x] preload / preloadAll
-- [x] fadeIn / fadeOut
-- [x] reset / resetAll
-- [x] setTimePosition
-- [x] setVolume / setGlobalVolume
-- [x] onEnd
-- [x] isPlaying
+## 🗺️ Roadmap
+-------
+See the [Roadmap](./Roadmap.md) for planned features and current progress.
 
-### Development Utilities
-- [ ] Total Sound Count function
-- [ ] Currently Playing Sounds function
-- [ ] Sound Instance Getter function
-- [ ] Sound Properties Getter function
+&nbsp;
 
-### Category API
-- [x] playCategory
-- [x] stopCategory / stopAllCategories
-- [x] setCategoryVolume / setGlobalCategoryVolume
-- [x] fadeInCategory / fadeOutCategory
-- [x] preloadCategory / preloadAllCategories
-- [x] isCategoryPlaying
-- [x] onCategoryEnd
-- [x] resetCategory / resetAllCategories
-- [x] playSoundFromCategory
+## 📝 License
 
-### Features
-- [x] Sound Autocompletion
-- [x] Sound Categories
-- [ ] Sound Creation functions
-- [ ] Sound Priority
-- [ ] Implement the new Roblox Sound API
+**Sound Manager** is licensed under the [MIT LICENSE](./LICENSE).
 
-
+&nbsp;
 For more Details:
 https://dev-lukas0.github.io/Sound-Manager-Docs/
