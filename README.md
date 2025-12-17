@@ -1,4 +1,13 @@
-# Sound Manager
+<h1 align="center">
+	<a href="https://www.npmjs.com/package/@rbxts/sound-manager">
+		<img src="public/logo.png" alt="Sound-Manager" width="200" />
+	</a>
+	<br />
+	<b>Sound Manager</b>
+</h1>
+
+
+## Sound Manager
 
 ![npm](https://img.shields.io/npm/dt/@rbxts/sound-manager?style=flat-square) ![npm](https://img.shields.io/npm/v/@rbxts/sound-manager?style=flat-square) ![GitHub](https://img.shields.io/github/license/dev-lukas0/Sound-Manager?style=flat-square)
 
