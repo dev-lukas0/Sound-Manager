@@ -22,7 +22,7 @@ Sounds.stop("SCP096");
 
 const speaker = game.Workspace.WaitForChild("Speaker") as BasePart;
 const spatialHandle1 = Sounds.play("Test", { emitters: [speaker] });
-spatialHandle1?.fadeIn?.(1);
+spatialHandle1;
 task.wait(10);
 spatialHandle1?.fadeOut?.(2);
 spatialHandle1?.destroy?.();

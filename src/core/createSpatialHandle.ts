@@ -6,10 +6,10 @@ import { fadeIn, fadeOut } from "../utils/functions";
  * @param assetId Asset ID
  * @param emitters Emitter
  */
-export function createSpatialHandle(assetId: string, emitters: BasePart[]): SoundHandle {
+export function createSpatialHandle(assetId: string, emitters: BasePart[], volume: number): SoundHandle {
     const player = new Instance("AudioPlayer");
     player.Asset = assetId;
-    player.Volume = 1;
+    player.Volume = volume;
     player.Parent = game.GetService("ReplicatedStorage");
 
     const emitterInstances: AudioEmitter[] = [];

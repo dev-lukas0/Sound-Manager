@@ -48,7 +48,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             sound?.Play();
         } else {
             const emittersArray = spatial.emitters;
-            const handle = createSpatialHandle(config.id, emittersArray);
+            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
             handle.play();
             return handle;
         }
