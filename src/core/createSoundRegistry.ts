@@ -1,4 +1,4 @@
-import { SoundOptions } from "./options";
+import { SoundHandle, SoundOptions } from "./options";
 import { createSpatialHandle } from "./createSpatialHandle";
 
 /**
@@ -7,6 +7,7 @@ import { createSpatialHandle } from "./createSpatialHandle";
  */
 export function createSoundRegistry<T extends Record<string, SoundOptions>>(definitions: T) {
     type SoundName = keyof T;
+    const spatialHandles = new Map<string, SoundHandle>();
 
     const ReplicatedStorage = game.GetService("ReplicatedStorage");
 
@@ -46,10 +47,15 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             load(name);
             const sound = folder.FindFirstChild(name as string) as Sound;
             sound?.Play();
+            return;
         } else {
             const emittersArray = spatial.emitters;
             const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+
+            spatialHandles.set(name as string, handle);
             handle.play();
+
+            return handle;
         }
     }
 
@@ -59,17 +65,18 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @param spatial Array of Baseparts
      */
     function stop(name: SoundName, spatial?: { emitters: BasePart[] }) {
-        const config = definitions[name];
-
-        if (!spatial || !spatial.emitters) {
+        if (!spatial) {
             const sound = folder.FindFirstChild(name as string) as Sound;
             sound?.Stop();
-        } else {
-            const emittersArray = spatial.emitters;
-            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
-            handle.destroy();
+            return;
         }
 
+        const handle = spatialHandles.get(name as string);
+        if (!handle) return;
+
+        handle.stop();
+        handle.destroy();
+        spatialHandles.delete(name as string);
     }
 
     /**
@@ -110,6 +117,11 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             const emittersArray = spatial.emitters;
             const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
             handle.fadeIn?.(duration, volume);
+            if (!config.loop === true) {
+                handle.played(() => {
+                    handle.destroy();
+                });
+            }
         }
     }
 
@@ -146,6 +158,11 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             const emittersArray = spatial.emitters;
             const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
             handle.fadeOut?.(duration);
+            if (!config.loop === true) {
+                handle.played(() => {
+                    handle.destroy();
+                });
+            }
         }
     }
 

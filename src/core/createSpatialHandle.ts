@@ -46,6 +46,10 @@ export function createSpatialHandle(assetId: string, emitters: BasePart[], volum
         destroy() {
             player.Destroy()
             emitterInstances.forEach(e => e.Destroy())
+        },
+
+        played(callback: () => void) {
+            player.Ended.Connect(callback);
         }
     };
 }

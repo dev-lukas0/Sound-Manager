@@ -21,17 +21,17 @@ Sounds.stop("SCP096");
 
 
 const speaker = game.Workspace.WaitForChild("Speaker") as BasePart;
-const spatialHandle1 = Sounds.play("Test", { emitters: [speaker] });
-spatialHandle1;
-task.wait(10);
-spatialHandle1?.fadeOut?.(2);
-spatialHandle1?.destroy?.();
+Sounds.play("Test", { emitters: [speaker] });
+task.wait(3);
+Sounds.stop("Test", { emitters: [speaker] });
 
 const left = game.Workspace.WaitForChild("LeftSpeaker") as BasePart;
 const right = game.Workspace.WaitForChild("RightSpeaker") as BasePart;
 
-const spatialHandle2 = Sounds.play("Test", { emitters: [left, right] });
-spatialHandle2?.fadeIn?.(2);
+Sounds.play("Test", { emitters: [left, right] });
+task.wait(3);
+Sounds.stop("Test", { emitters: [left, right] });
 task.wait(5);
-spatialHandle2?.fadeOut?.(2);
-spatialHandle2?.destroy?.();
+Sounds.play("Test", { emitters: [left, right] });
+task.wait(3);
+Sounds.stop("Test", { emitters: [left, right] });

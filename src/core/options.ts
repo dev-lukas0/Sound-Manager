@@ -14,6 +14,7 @@ export interface SoundHandle {
     fadeIn?(duration: number, volume: number): void;
     fadeOut?(duration: number): void;
     destroy(): void;
+    played(callback: () => void): void;
 }
 
 interface SoundDefinition {
