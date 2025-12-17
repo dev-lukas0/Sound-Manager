@@ -1,4 +1,5 @@
-import { SoundOptions } from "./options";
+import { SoundHandle, SoundOptions } from "./options";
+import { createSpatialHandle } from "./createSpatialHandle";
 
 /**
  * Create a sound Registry
@@ -36,11 +37,21 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Plays a Sound
      * @param name Define which Sound should be played
+     * @param spatial Arry of Baseparts
      */
-    function play(name: SoundName) {
-        load(name);
-        const sound = folder.FindFirstChild(name as string) as Sound;
-        sound?.Play();
+    function play(name: SoundName, spatial?: { emitters: BasePart[] }) {
+        const config = definitions[name];
+
+        if (!spatial || !spatial.emitters) {
+            load(name);
+            const sound = folder.FindFirstChild(name as string) as Sound;
+            sound?.Play();
+        } else {
+            const emittersArray = spatial.emitters;
+            const handle = createSpatialHandle(config.id, emittersArray);
+            handle.play();
+            return handle;
+        }
     }
 
     /**

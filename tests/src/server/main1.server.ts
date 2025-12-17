@@ -19,7 +19,7 @@ const SoundCategories = createSoundCategoryRegistry({
         }
     }
 });
-
+/*
 task.wait(5);
 SoundCategories.playCategory("SCP096");
 task.wait(3);
@@ -32,3 +32,4 @@ SoundCategories.fadeOutCategory("SCP096", 3);
 task.wait(3);
 SoundCategories.stopCategory("SCP096");
 print(SoundCategories.isCategoryPlaying("SCP096"));
+*/

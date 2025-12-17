@@ -2,6 +2,18 @@ export interface SoundOptions {
     volume?: number;
     loop?: boolean;
     id: string;
+    spatial?: {
+        attenuation?: number;
+        directional?: boolean;
+    }
+}
+
+export interface SoundHandle {
+    play(): void;
+    stop(): void;
+    fadeIn?(duration: number): void;
+    fadeOut?(duration: number): void;
+    destroy(): void;
 }
 
 interface SoundDefinition {
