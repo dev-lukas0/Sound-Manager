@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rbxtsc",
-    "watch": "rbxtsc -w"
+    "watch": "rbxtsc -w",
+    "start": "npm install ../rbxts-sound-manager-2.1.0.tgz && rojo serve --port 9374"
   },
   "keywords": [],
   "author": "",

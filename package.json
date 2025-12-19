@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rbxtsc",
     "watch": "rbxtsc -w",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "start": "npm pack && npm run watch"
   },
   "keywords": [],
   "author": "Easy-Build-Studio",
