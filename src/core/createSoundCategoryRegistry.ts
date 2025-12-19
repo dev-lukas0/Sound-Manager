@@ -1,4 +1,6 @@
 import { CategoryOptions } from "./options";
+import { createSpatialHandle } from "./createSpatialHandle";
+import { SoundHandle } from "./options";
 
 /**
  * Create a sound category Registry
@@ -6,6 +8,7 @@ import { CategoryOptions } from "./options";
  */
 export function createSoundCategoryRegistry<T extends Record<string, CategoryOptions>>(definitions: T) {
     type SoundCategory = keyof T;
+    const spatialHandles = new Map<string, SoundHandle>();
 
     const ReplicatedStorage = game.GetService("ReplicatedStorage");
 
@@ -47,25 +50,28 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
      * Play every Sound from a Sound Category
      * @param name Sound Category
      */
-    function playCategory<C extends SoundCategory>(name: C) {
+    function playCategory<C extends SoundCategory>(name: C, spatial?: { emitters: BasePart[] }) {
         loadCategory(name);
         const config = definitions[name];
 
-        const ReplicatedStorage = game.GetService("ReplicatedStorage");
-
-        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
-        if (!soundsFolder) return;
-
-        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        const categoryFolder = folder.FindFirstChild(config.category as string) as Folder;
         if (!categoryFolder) return;
-            for (const [sound] of pairs(config.sounds)) {
-                const _sound = categoryFolder.FindFirstChild(sound as string);
-                if (!_sound) continue;
-                if (_sound?.IsA("Sound")) {
-                    _sound.Play();
-                }
+
+        for (const sound of categoryFolder.GetChildren()) {
+            if (!sound.IsA("Sound")) continue;
+
+            if (spatial && spatial.emitters.size() > 0) {
+                const handle = createSpatialHandle(sound.SoundId, spatial.emitters, sound.Volume);
+                spatialHandles.set(sound.Name, handle);
+                handle.play();
+            } else {
+                sound.Play();
+            }
         }
+
+        return spatialHandles;
     }
+
 
     /**
      * Stop every Sound from a Sound Category
