@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rbxtsc",
     "watch": "rbxtsc -w",
-    "start": "npm install ../rbxts-sound-manager-2.1.0.tgz && rojo serve --port 9374"
+    "start": "npm install ../rbxts-sound-manager-2.2.0.tgz && rojo serve --port 9374"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@rbxts/services": "^1.6.0",
-    "@rbxts/sound-manager": "file:../rbxts-sound-manager-2.1.0.tgz",
+    "@rbxts/sound-manager": "file:../rbxts-sound-manager-2.2.0.tgz",
     "@rbxts/testez": "^0.4.2-ts.0"
   }
 }

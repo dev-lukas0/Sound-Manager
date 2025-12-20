@@ -8,7 +8,7 @@ import { SoundHandle } from "./options";
  */
 export function createSoundCategoryRegistry<T extends Record<string, CategoryOptions>>(definitions: T) {
     type SoundCategory = keyof T;
-    const spatialHandles = new Map<string, SoundHandle>();
+    const spatialHandles = new Map<SoundCategory, Map<string, SoundHandle>>();
 
     const ReplicatedStorage = game.GetService("ReplicatedStorage");
 
@@ -50,27 +50,50 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
      * Play every Sound from a Sound Category
      * @param name Sound Category
      */
-    function playCategory<C extends SoundCategory>(name: C, spatial?: { emitters: BasePart[] }) {
+    function playCategory<C extends SoundCategory>(
+        name: C,
+        spatial?: { emitters: BasePart[] }
+    ) {
         loadCategory(name);
         const config = definitions[name];
 
         const categoryFolder = folder.FindFirstChild(config.category as string) as Folder;
         if (!categoryFolder) return;
 
-        for (const sound of categoryFolder.GetChildren()) {
-            if (!sound.IsA("Sound")) continue;
+        let categoryHandles: Map<string, SoundHandle> | undefined;
 
-            if (spatial && spatial.emitters.size() > 0) {
-                const handle = createSpatialHandle(sound.SoundId, spatial.emitters, sound.Volume);
-                spatialHandles.set(sound.Name, handle);
-                handle.play();
-            } else {
-                sound.Play();
+        if (spatial && spatial.emitters.size() > 0) {
+            categoryHandles = spatialHandles.get(name);
+            if (!categoryHandles) {
+                categoryHandles = new Map();
+                spatialHandles.set(name, categoryHandles);
             }
         }
 
-        return spatialHandles;
+        for (const instance of categoryFolder.GetChildren()) {
+            if (!instance.IsA("Sound")) continue;
+
+            if (spatial && spatial.emitters.size() > 0 && categoryHandles) {
+                const old = categoryHandles.get(instance.Name);
+                if (old) {
+                    old.stop();
+                    old.destroy();
+                }
+
+                const handle = createSpatialHandle(
+                    instance.SoundId,
+                    spatial.emitters,
+                    instance.Volume
+                );
+
+                categoryHandles.set(instance.Name, handle);
+                handle.play();
+            } else {
+                instance.Play();
+            }
+        }
     }
+
 
 
     /**
@@ -78,23 +101,28 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
      * @param name Sound Category
      */
     function stopCategory<C extends SoundCategory>(name: C) {
+        const categoryHandles = spatialHandles.get(name);
+        if (categoryHandles) {
+            for (const [_, handle] of categoryHandles) {
+                handle.stop();
+                handle.destroy();
+            }
+            categoryHandles.clear();
+            spatialHandles.delete(name);
+        }
+
         const config = definitions[name];
-
-        const ReplicatedStorage = game.GetService("ReplicatedStorage");
-
-        const soundsFolder = ReplicatedStorage.FindFirstChild("Sounds") as Folder;
-        if (!soundsFolder) return;
-
-        const categoryFolder = soundsFolder.FindFirstChild(config.category as string) as Folder;
+        const categoryFolder = folder.FindFirstChild(config.category as string) as Folder;
         if (!categoryFolder) return;
-            for (const [sound] of pairs(config.sounds)) {
-                const _sound = categoryFolder.FindFirstChild(sound as string);
-                if (!_sound) continue;
-                if (_sound?.IsA("Sound")) {
-                    _sound.Stop();
-                }
+
+        for (const instance of categoryFolder.GetChildren()) {
+            if (instance.IsA("Sound")) {
+                instance.Stop();
+            }
         }
     }
+
+
 
     /**
      * Stops every Sound from every Sound Category

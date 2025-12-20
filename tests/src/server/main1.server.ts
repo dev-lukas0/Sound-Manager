@@ -22,8 +22,6 @@ const SoundCategories = createSoundCategoryRegistry({
 const emitters: BasePart[] = [
     game.Workspace.WaitForChild("Part1") as BasePart,
 ];
-
-const spatialHandles = SoundCategories.playCategory("SCP096", { emitters });
-spatialHandles
-
+SoundCategories.playCategory("SCP096", { emitters });
+task.wait(3);
 SoundCategories.stopCategory("SCP096");
