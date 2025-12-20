@@ -14,7 +14,7 @@
 
 ### Development Utilities
 - [x] Total Sound Count function
-- [ ] Currently Playing Sounds function
+- [x] Currently Playing Sounds function
 - [ ] Sound Instance Getter function
 - [ ] Sound Properties Getter function
 
