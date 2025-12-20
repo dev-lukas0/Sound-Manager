@@ -12,3 +12,6 @@ Available on [npm](https://www.npmjs.com/package/@rbxts/sound-manager)
 ```bash title="Terminal"
 npm install @rbxts/sound-manager
 ```
+
+```bash title="Terminal"
+yarn add @rbxts/sound-manager

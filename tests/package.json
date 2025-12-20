@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@rbxts/services": "^1.6.0",
-    "@rbxts/sound-manager": "file:../rbxts-sound-manager-2.2.0.tgz",
+    "@rbxts/sound-manager": "^2.2.0",
     "@rbxts/testez": "^0.4.2-ts.0"
   }
 }

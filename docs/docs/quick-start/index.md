@@ -19,11 +19,6 @@ npm install @rbxts/sound-manager
 yarn add @rbxts/sound-manager
 ```
 
-```bash title="Terminal"
-pnpm add @rbxts/sound-manager
-```
-
-
 ## Start using Sound-Manager
 
 You're now ready to use Sound-Manager! Create a SoundRegistry to start managing sounds in your project.
