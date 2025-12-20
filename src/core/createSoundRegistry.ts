@@ -276,7 +276,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @returns Boolean
      */
     function isPlaying(sound: SoundName): boolean {
-        const _sound = folder.WaitForChild(sound as string) as Sound;
+        const _sound = folder.FindFirstChild(sound as string) as Sound;
         if (_sound.IsPlaying === true) {
             return true;
         } else {

@@ -15,8 +15,7 @@
 ### Development Utilities
 - [x] Total Sound Count function
 - [x] Currently Playing Sounds function
-- [ ] Sound Instance Getter function
-- [ ] Sound Properties Getter function
+- [x] Sound Properties Getter function
 
 ### Category API
 - [x] playCategory
