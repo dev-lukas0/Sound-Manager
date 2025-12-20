@@ -1,4 +1,5 @@
 ---
+side-bar-position: 1
 description: Install Sound-Manager for your Roblox project
 ---
 
