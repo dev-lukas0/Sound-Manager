@@ -1,4 +1,4 @@
-import { createSoundCategoryRegistry } from "@rbxts/sound-manager";
+/*import { createSoundCategoryRegistry } from "@rbxts/sound-manager";
 
 const SoundCategories = createSoundCategoryRegistry({
     SCP096: {
@@ -25,3 +25,4 @@ const emitters: BasePart[] = [
 SoundCategories.playCategory("SCP096", { emitters });
 task.wait(3);
 SoundCategories.stopCategory("SCP096");
+*/
