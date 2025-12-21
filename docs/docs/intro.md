@@ -8,7 +8,11 @@ Sound-Manager is a roblox library designed to simplify sound management in your 
 
 ## Getting Started
 
-To get started with Sound-Manager, install the library via npm:
+To get started with Sound-Manager, install the library via npm or yarn:
 ```bash
 npm install @rbxts/sound-manager
+```
+
+```bash
+yarn add @rbxts/sound-manager
 ```
