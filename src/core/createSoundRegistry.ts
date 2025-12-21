@@ -67,6 +67,10 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     function stop(name: SoundName, spatial?: { emitters: BasePart[] }) {
         if (!spatial) {
             const sound = folder.FindFirstChild(name as string) as Sound;
+            if (!sound) {
+                warn(`${name as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
             sound?.Stop();
             return;
         }
@@ -99,6 +103,10 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         const config = definitions[soundName];
         if (!spatial || !spatial.emitters) {
             const sound = folder.FindFirstChild(soundName as string) as Sound;
+            if (!sound) {
+                warn(`${soundName as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
             sound.Volume = 0;
             sound.Play();
 
@@ -136,7 +144,10 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         const config = definitions[soundName];
         if (!spatial || !spatial.emitters) {
             const sound = folder.FindFirstChild(soundName as string) as Sound;
-            if (!sound) return;
+            if (!sound) {
+                warn(`${soundName as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
 
             const startVolume = sound.Volume;
             const endVolume = targetVolume ?? 0;
@@ -172,7 +183,10 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      */
     function reset(sound: SoundName) {
         const _sound = folder.FindFirstChild(sound as string) as Sound;
-        if (!sound) return;
+        if (!_sound) {
+                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
 
         _sound.TimePosition = 0;
     }
@@ -196,7 +210,10 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      */
     function setTimePosition(sound: SoundName, timePosition: number) {
         const _sound = folder.FindFirstChild(sound as string) as Sound;
-        if (!sound) return;
+        if (!_sound) {
+                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
 
         _sound.TimePosition = timePosition;
     }
@@ -227,7 +244,10 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         const config = definitions[sound];
         if (!spatial || spatial.emitters) {
             const _sound = folder.FindFirstChild(sound as string) as Sound;
-            if (!sound) return;
+            if (!_sound) {
+                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
 
             _sound.Volume = volume;
         } else {
@@ -258,8 +278,10 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     function onEnd(sound: SoundName, callback: () => void, spatial?: { emitters: BasePart[] }) {
         if (!spatial) {
             const _sound = folder.WaitForChild(sound as string) as Sound;
-            if (!_sound) return;
-
+            if (!_sound) {
+                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
             _sound.Ended.Connect(callback);
         } else {
             const handle = spatialHandles.get(sound as string);
@@ -285,6 +307,9 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      */
     function isPlaying(sound: SoundName): boolean {
         const _sound = folder.FindFirstChild(sound as string) as Sound;
+        if (!_sound) {
+            warn(`${sound as string} not found! Tip: Preload the sound first before using it.`)
+        }
         if (_sound.IsPlaying === true) {
             return true;
         } else {
