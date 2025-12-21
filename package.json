@@ -19,8 +19,7 @@
     "!**/*.tsbuildinfo"
   ],
   "publishConfig": {
-    "access": "public",
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "devDependencies": {
     "@rbxts/compiler-types": "^3.0.0-types.0",
