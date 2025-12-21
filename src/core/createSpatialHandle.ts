@@ -50,6 +50,6 @@ export function createSpatialHandle(assetId: string, emitters: BasePart[], volum
 
         played(callback: () => void) {
             player.Ended.Connect(callback);
-        }
+        },
     };
 }

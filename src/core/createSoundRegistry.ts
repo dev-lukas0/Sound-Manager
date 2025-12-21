@@ -255,11 +255,19 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @param name Sound Name
      * @param callback Callback
      */
-    function onEnd(sound: SoundName, callback: () => void) {
-        const _sound = folder.WaitForChild(sound as string) as Sound;
-        if (!_sound) return;
+    function onEnd(sound: SoundName, callback: () => void, spatial?: { emitters: BasePart[] }) {
+        if (!spatial) {
+            const _sound = folder.WaitForChild(sound as string) as Sound;
+            if (!_sound) return;
 
-        _sound.Ended.Connect(callback);
+            _sound.Ended.Connect(callback);
+        } else {
+            const handle = spatialHandles.get(sound as string);
+            if (!handle) return;
+
+            handle.played(callback);
+        }
+        
     }
 
     /**
