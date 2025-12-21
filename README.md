@@ -1,6 +1,6 @@
 <h1 align="center">
 	<a href="https://www.npmjs.com/package/@rbxts/sound-manager">
-		<img src="public/logo.png" alt="Sound-Manager" width="200" />
+		<img src="https://github.com/dev-lukas0/Sound-Manager/blob/master/public/logo.png?raw=true" alt="Sound-Manager" width="200" />
 	</a>
 	<br />
 	<b>Sound Manager</b>

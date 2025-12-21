@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/sound-manager",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A sound manager for Roblox-Typescript projects.",
   "main": "out/init.lua",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "Easy-Build-Studio",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "types": "out/index.d.ts",
   "files": [
