@@ -40,7 +40,7 @@ npm install @rbxts/sound-manager
 
 ### ⚡ Starting with Sound Manager
 
-Sound-Manager uses [`createSoundRegistry`]() and [`createSoundCategoryRegistry`]() to create sounds and categories.
+Sound-Manager uses [`createSoundRegistry`](https://dev-lukas0.github.io/Sound-Manager/docs/reference/create-sound-registry) and [`createSoundCategoryRegistry`](https://dev-lukas0.github.io/Sound-Manager/docs/reference/create-sound-category-registry) to create sounds and categories.
 
 ```ts
 import { createSoundRegistry } from "@rbxts/sound-manager";
