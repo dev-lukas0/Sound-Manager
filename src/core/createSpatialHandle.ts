@@ -51,5 +51,13 @@ export function createSpatialHandle(assetId: string, emitters: BasePart[], volum
         played(callback: () => void) {
             player.Ended.Connect(callback);
         },
+
+        playing() {
+            return player.IsPlaying;
+        },
+
+        setTimePosition(timeposition: number) {
+            player.TimePosition = timeposition;
+        }
     };
 }

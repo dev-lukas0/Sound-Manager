@@ -22,17 +22,29 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * Loads a Sound
      * @param name Define which Sound should be loaded
      */
-    function load(name: SoundName) {
-        if (folder.FindFirstChild(name as string)) return;
-
+    function load(name: SoundName, spatial?: { emitters: BasePart[] }) {
         const config = definitions[name];
+        if (!spatial || !spatial.emitters) {
+            if (folder.FindFirstChild(name as string)) return;
 
-        const sound = new Instance("Sound");
-        sound.Name = name as string;
-        sound.SoundId = config.id;
-        sound.Volume = config.volume ?? 1;
-        sound.Looped = config.loop ?? false;
-        sound.Parent = folder;
+            const config = definitions[name];
+
+            const sound = new Instance("Sound");
+            sound.Name = name as string;
+            sound.SoundId = config.id;
+            sound.Volume = config.volume ?? 1;
+            sound.Looped = config.loop ?? false;
+            sound.Parent = folder;
+        } else {
+
+        const emittersArray = spatial.emitters;
+        const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+
+        spatialHandles.set(name as string, handle);
+
+        return handle;
+        }
+
     }
 
     /**
@@ -91,6 +103,57 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             load(name as SoundName);
         }
     }
+
+    /**
+     * Preloads all spatial Sounds
+     * @param emittersMap
+     */
+    function preloadAllSpatial(
+        emittersMap: Partial<Record<SoundName, BasePart[]>>
+    ) {
+        for (const [name, emitters] of pairs(emittersMap)) {
+            const emitterArray = emitters as BasePart[] | undefined;
+            if (!emitterArray) continue;
+
+            const soundName = name as SoundName;
+
+            if (spatialHandles.has(soundName as string)) continue;
+
+            const config = definitions[soundName];
+
+            const handle = createSpatialHandle(
+                config.id,
+                emitterArray,
+                config.volume ?? 1
+            );
+
+            spatialHandles.set(soundName as string, handle);
+        }
+    }
+
+    /**
+     * Preloads a spatial sound
+     * @param name Sound Name
+     * @param emitters Emitters
+     */
+    function preloadSpatial(name: SoundName, emitters: BasePart[]) {
+        if (spatialHandles.has(name as string)) return;
+
+        const config = definitions[name];
+        if (!config) {
+            warn(`${name as string} is not defined in the registry.`);
+            return;
+        }
+
+        const handle = createSpatialHandle(
+            config.id,
+            emitters,
+            config.volume ?? 1
+        );
+
+        spatialHandles.set(name as string, handle);
+    }
+
 
     /**
      * Smoothly fade in a sound
@@ -181,24 +244,37 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * Reset a Sound
      * @param sound Sound Instance
      */
-    function reset(sound: SoundName) {
-        const _sound = folder.FindFirstChild(sound as string) as Sound;
-        if (!_sound) {
-                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
-                return;
-            }
+    function reset(sound: SoundName, spatial?: boolean) {
+        if (!spatial) {
+            const _sound = folder.FindFirstChild(sound as string) as Sound;
+            if (!_sound) {
+                    warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+                    return;
+                }
 
-        _sound.TimePosition = 0;
+            _sound.TimePosition = 0;
+        }
+
+        const _sound = spatialHandles.get(sound as string);
+        _sound?.setTimePosition(0);
     }
 
     /**
      * Reset every Sound
      * @param sound Sound Instance
      */
-    function resetAll(sound: SoundName) {
-        for (const sound of folder.GetChildren()) {
-            if (sound.IsA("Sound")) {
-                sound.TimePosition = 0;
+    function resetAll(sound: SoundName, spatial?: boolean) {
+        if (!spatial) {
+            for (const sound of folder.GetChildren()) {
+                if (sound.IsA("Sound")) {
+                    sound.TimePosition = 0;
+                }
+            }
+        }
+
+        for (const instance of folder.GetChildren()) {
+            if (instance.IsA("AudioPlayer")) {
+                instance.TimePosition = 0;
             }
         }
     }
@@ -208,23 +284,38 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @param sound Sound Instance
      * @param timePosition Time Position
      */
-    function setTimePosition(sound: SoundName, timePosition: number) {
-        const _sound = folder.FindFirstChild(sound as string) as Sound;
-        if (!_sound) {
-                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
-                return;
-            }
+    function setTimePosition(sound: SoundName, timePosition: number, spatial?: boolean) {
+        if (!spatial) {
+            const _sound = folder.FindFirstChild(sound as string) as Sound;
+            if (!_sound) {
+                    warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+                    return;
+                }
 
-        _sound.TimePosition = timePosition;
+            _sound.TimePosition = timePosition;
+        }
+        const _sound = spatialHandles.get(sound as string);
+        _sound?.setTimePosition(timePosition);
     }
 
     /**
      * Stop every Sound
      * @param reset Define whether every Sound should also be reset?
      */
-    function stopAll(reset?: true) {
+    function stopAll(reset?: true, spatial?: boolean) {
+        if (!spatial) {
+            for (const instance of folder.GetChildren()) {
+                if (!instance.IsA("Sound")) continue;
+
+                instance.Stop();
+
+                if (reset) {
+                    instance.TimePosition = 0;
+                }
+            }
+        }
         for (const instance of folder.GetChildren()) {
-            if (!instance.IsA("Sound")) continue;
+            if (!instance.IsA("AudioPlayer")) continue;
 
             instance.Stop();
 
@@ -260,13 +351,22 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * Set the global Sound Volume
      * @param volume Sound Volume
      */
-    function setGlobalVolume(volume: number) {
-        for (const instance of folder.GetChildren()) {
-            if (!instance.IsA("Sound")) continue;
+    function setGlobalVolume(volume: number, spatial?: boolean) {
+        if (!spatial) {
+            for (const instance of folder.GetChildren()) {
+                if (!instance.IsA("Sound")) continue;
 
-            if (instance.IsA("Sound")) {
+                if (instance.IsA("Sound")) {
+                    instance.Volume = volume;
+                };
+            }
+        }
+        for (const instance of folder.GetChildren()) {
+            if (!instance.IsA("AudioPlayer")) continue;
+
+            if (instance.IsA("AudioPlayer")) {
                 instance.Volume = volume;
-            };
+            }
         }
     }
 
@@ -305,16 +405,27 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * @param sound Sound Instance
      * @returns Boolean
      */
-    function isPlaying(sound: SoundName): boolean {
-        const _sound = folder.FindFirstChild(sound as string) as Sound;
+    function isPlaying(sound: SoundName, spatial?: boolean): boolean {
+        if (!spatial) {
+            const _sound = folder.FindFirstChild(sound as string) as Sound;
+            if (!_sound) {
+                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+            }
+            if (_sound.IsPlaying === true) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        const _sound = spatialHandles.get(sound as string);
         if (!_sound) {
-            warn(`${sound as string} not found! Tip: Preload the sound first before using it.`)
+            warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
         }
-        if (_sound.IsPlaying === true) {
+        if (_sound?.playing) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }   
 
 
@@ -334,5 +445,6 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         resetAll,
         onEnd,
         isPlaying,
+        preloadAllSpatial,
     }
 }

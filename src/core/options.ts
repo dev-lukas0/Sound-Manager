@@ -15,6 +15,8 @@ export interface SoundHandle {
     fadeOut?(duration: number): void;
     destroy(): void;
     played(callback: () => void): void;
+    playing(): boolean;
+    setTimePosition(timeposition: number): void;
 }
 
 interface SoundDefinition {
