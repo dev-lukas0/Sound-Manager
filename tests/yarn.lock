@@ -129,10 +129,10 @@
   resolved "https://registry.npmjs.org/@rbxts/services/-/services-1.6.0.tgz"
   integrity sha512-YH02E1/tGHeMXB0Mam8qPdAZa2fjQWdylEscSL4Zn0RIaQeByYImA2qUsXM3nBdhcyKHDwltzSznDKyCGfFEWA==
 
-"@rbxts/sound-manager@file:../rbxts-sound-manager-2.3.0.tgz":
-  version "2.3.0"
-  resolved "file:../rbxts-sound-manager-2.3.0.tgz"
-  integrity sha512-tpAoQtSAS8N9UaopMrqD3VhZxWmrF1Oxf2q/jVCGY9qblP21lydsbBPtZc2eE4ZL7fUR0Ag6Y5cd4KhEJjM0Vg==
+"@rbxts/sound-manager@file:../rbxts-sound-manager-2.3.3.tgz":
+  version "2.3.3"
+  resolved "file:../rbxts-sound-manager-2.3.3.tgz"
+  integrity sha512-/YnBkgCM35k3q2w6JngN5QkqP3jrMnmRnJPkxg5OZZhS0op5pZcVMN+JQvo7DDzI33Ji1zw5pCigSVcG4ieN/Q==
   dependencies:
     "@rbxts/testez" "^0.4.2-ts.0"
 

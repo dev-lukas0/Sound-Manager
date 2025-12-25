@@ -21,6 +21,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Loads a Sound
      * @param name Define which Sound should be loaded
+     * @param spatial Array of BaseParts
      */
     function load(name: SoundName, spatial?: { emitters: BasePart[] }) {
         const config = definitions[name];
@@ -243,6 +244,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Reset a Sound
      * @param sound Sound Instance
+     * @param spatial Define whether this sound is a spatial sound or not
      */
     function reset(sound: SoundName, spatial?: boolean) {
         if (!spatial) {
@@ -262,6 +264,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Reset every Sound
      * @param sound Sound Instance
+     * @param spatial Define whether this sound is a spatial sound or not
      */
     function resetAll(sound: SoundName, spatial?: boolean) {
         if (!spatial) {
@@ -283,6 +286,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * Set Time Position
      * @param sound Sound Instance
      * @param timePosition Time Position
+     * @param spatial Define whether this sound is a spatial sound or not
      */
     function setTimePosition(sound: SoundName, timePosition: number, spatial?: boolean) {
         if (!spatial) {
@@ -301,6 +305,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Stop every Sound
      * @param reset Define whether every Sound should also be reset?
+     * @param spatial Define whether this sound is a spatial sound or not
      */
     function stopAll(reset?: true, spatial?: boolean) {
         if (!spatial) {
@@ -350,6 +355,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
     /**
      * Set the global Sound Volume
      * @param volume Sound Volume
+     * @param spatial Define whether this sound is a spatial sound or not
      */
     function setGlobalVolume(volume: number, spatial?: boolean) {
         if (!spatial) {
@@ -374,6 +380,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * Does something on Sound end
      * @param name Sound Name
      * @param callback Callback
+     * @param spatial Define whether this sound is a spatial sound or not
      */
     function onEnd(sound: SoundName, callback: () => void, spatial?: { emitters: BasePart[] }) {
         if (!spatial) {
@@ -404,6 +411,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
      * Check whether a Sound is playing
      * @param sound Sound Instance
      * @returns Boolean
+     * @param spatial Define whether this sound is a spatial sound or not
      */
     function isPlaying(sound: SoundName, spatial?: boolean): boolean {
         if (!spatial) {
@@ -422,11 +430,37 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         if (!_sound) {
             warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
         }
-        if (_sound?.playing) {
+        if (_sound?.playing() === true) {
             return true;
         }
         return false;
     }   
+
+    /**
+     * Delete a sound instance
+     * @param sound Sound Instance
+     * @param spatial Define whether this sound is a spatial sound or not
+     */
+    function destroy(sound: SoundName, spatial?: boolean) {
+        if (!spatial) {
+            const instance = folder.FindFirstChild(sound as string) as Sound | undefined;
+            if (!instance) {
+                warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+                return;
+            }
+            instance.Destroy();
+            return;
+        }
+
+        const handle = spatialHandles.get(sound as string);
+        if (!handle) {
+            warn(`${sound as string} not found! Tip: Preload the sound first before using it.`);
+            return;
+        }
+
+        handle.destroy();
+    }
+
 
 
     return {
@@ -446,5 +480,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         onEnd,
         isPlaying,
         preloadAllSpatial,
+        preloadSpatial,
+        destroy,
     }
 }

@@ -29,3 +29,10 @@ export interface CategoryOptions {
     category: string;
     sounds: Record<string, SoundDefinition>;
 }
+
+export interface AudioListenerHandle {
+    listener: AudioListener;
+    output: AudioDeviceOutput;
+    wire: Wire;
+    destroy(): void;
+}

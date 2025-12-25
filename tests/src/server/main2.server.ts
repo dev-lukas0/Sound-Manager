@@ -1,4 +1,6 @@
+import { Workspace } from "@rbxts/services";
 import { createSoundRegistry } from "@rbxts/sound-manager";
+import { createAudioListener } from "@rbxts/sound-manager";
 
 const Sounds = createSoundRegistry({
     SCP096: {
@@ -36,5 +38,13 @@ Sounds.play("Test", { emitters: [left, right] });
 task.wait(3);
 Sounds.stop("Test", { emitters: [left, right] });
 */
+const newaudioListener = createAudioListener(Workspace.CurrentCamera!, "Test");
+newaudioListener?.destroy();
 
+Sounds.preloadSpatial("SCP096", [Workspace.WaitForChild("Part") as BasePart]);
+Sounds.preload("SCP096")
 Sounds.fadeIn("SCP096", 5, 0.5);
+task.wait(3);
+Sounds.destroy("SCP096");
+Sounds.destroy("SCP096");
+Sounds.play("SCP096", { emitters: [Workspace.WaitForChild("Part") as BasePart] })
