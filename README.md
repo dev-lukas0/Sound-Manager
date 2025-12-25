@@ -36,7 +36,7 @@ npm install @rbxts/sound-manager
 
 ## 🚀 Quick Start
 
-[See the Documentation ->](https://dev-lukas0.github.io/Sound-Manager-Docs/)
+[See the Documentation ->](https://dev-lukas0.github.io/Sound-Manager/)
 
 ### ⚡ Starting with Sound Manager
 
