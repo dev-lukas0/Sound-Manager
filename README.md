@@ -83,4 +83,4 @@ See the [Roadmap](./Roadmap.md) for planned features and current progress.
 &nbsp;
 
 For more Details:
-https://dev-lukas0.github.io/Sound-Manager-Docs/
+https://dev-lukas0.github.io/Sound-Manager/
