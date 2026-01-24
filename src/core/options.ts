@@ -1,6 +1,7 @@
 export interface SoundOptions {
     volume?: number;
     loop?: boolean;
+    playbackSpeed?: number;
     id: string;
     spatial?: {
         attenuation?: number;
@@ -17,12 +18,14 @@ export interface SoundHandle {
     played(callback: () => void): void;
     playing(): boolean;
     setTimePosition(timeposition: number): void;
+    setPlayBackSpeed(playbackspeed: number): void;
 }
 
 interface SoundDefinition {
     id: string,
     volume?: number;
     loop?: boolean;
+    playBackSpeed?: number;
 }
 
 export interface CategoryOptions {

@@ -5,7 +5,7 @@ const Sounds = {
     SCP096: {
         id: "rbxassetid://4714389545",
         volume: 1,
-        loop: false,
+        loop: true,
     },
 
     Test: {

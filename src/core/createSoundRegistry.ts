@@ -39,7 +39,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         } else {
 
         const emittersArray = spatial.emitters;
-        const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+        const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1, config.loop ?? false, config.playbackSpeed ?? 1);
 
         spatialHandles.set(name as string, handle);
 
@@ -63,7 +63,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             return;
         } else {
             const emittersArray = spatial.emitters;
-            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1, config.loop ?? false, config.playbackSpeed ?? 1);
 
             spatialHandles.set(name as string, handle);
             handle.play();
@@ -125,7 +125,9 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             const handle = createSpatialHandle(
                 config.id,
                 emitterArray,
-                config.volume ?? 1
+                config.volume ?? 1,
+                config.loop ?? false,
+                config.playbackSpeed ?? 1
             );
 
             spatialHandles.set(soundName as string, handle);
@@ -149,7 +151,9 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
         const handle = createSpatialHandle(
             config.id,
             emitters,
-            config.volume ?? 1
+            config.volume ?? 1,
+            config.loop ?? false,
+            config.playbackSpeed ?? 1
         );
 
         spatialHandles.set(name as string, handle);
@@ -187,7 +191,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             })
         } else {
             const emittersArray = spatial.emitters;
-            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1, config.loop ?? false, config.playbackSpeed ?? 1);
             handle.fadeIn?.(duration, volume);
             if (!config.loop === true) {
                 handle.played(() => {
@@ -231,7 +235,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             });
         } else {
             const emittersArray = spatial.emitters;
-            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1);
+            const handle = createSpatialHandle(config.id, emittersArray, config.volume ?? 1, config.loop ?? false, config.playbackSpeed ?? 1);
             handle.fadeOut?.(duration);
             if (!config.loop === true) {
                 handle.played(() => {
@@ -348,7 +352,7 @@ export function createSoundRegistry<T extends Record<string, SoundOptions>>(defi
             _sound.Volume = volume;
         } else {
             const emittersArray = spatial.emitters;
-            const handle = createSpatialHandle(config.id, emittersArray, volume);
+            const handle = createSpatialHandle(config.id, emittersArray, volume, config.loop ?? false, config.playbackSpeed ?? 1);
         }
     }
 

@@ -83,7 +83,9 @@ export function createSoundCategoryRegistry<T extends Record<string, CategoryOpt
                 const handle = createSpatialHandle(
                     instance.SoundId,
                     spatial.emitters,
-                    instance.Volume
+                    instance.Volume,
+                    false,
+                    1,
                 );
 
                 categoryHandles.set(instance.Name, handle);

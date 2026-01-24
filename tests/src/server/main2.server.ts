@@ -6,7 +6,8 @@ const Sounds = createSoundRegistry({
     SCP096: {
         id: "rbxassetid://4714389545",
         volume: 1,
-        loop: false,
+        loop: true,
+        playbackSpeed: 5,
     },
 
     Test: {
@@ -41,10 +42,13 @@ Sounds.stop("Test", { emitters: [left, right] });
 const newaudioListener = createAudioListener(Workspace.CurrentCamera!, "Test");
 newaudioListener?.destroy();
 
-Sounds.preloadSpatial("SCP096", [Workspace.WaitForChild("Part") as BasePart]);
-Sounds.preload("SCP096")
-Sounds.fadeIn("SCP096", 5, 0.5);
+//Sounds.preloadSpatial("SCP096", [Workspace.WaitForChild("Part") as BasePart]);
+//Sounds.preload("SCP096")
+//Sounds.fadeIn("SCP096", 5, 0.5);
+//task.wait(3);
+//Sounds.destroy("SCP096");
+//Sounds.destroy("SCP096");
+const sound = Sounds.play("SCP096", { emitters: [Workspace.WaitForChild("Part") as BasePart] });
 task.wait(3);
-Sounds.destroy("SCP096");
-Sounds.destroy("SCP096");
-Sounds.play("SCP096", { emitters: [Workspace.WaitForChild("Part") as BasePart] })
+sound?.setPlayBackSpeed(1);
+print("Set Speed")

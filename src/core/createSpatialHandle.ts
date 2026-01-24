@@ -6,11 +6,13 @@ import { fadeIn, fadeOut } from "../utils/functions";
  * @param assetId Asset ID
  * @param emitters Emitter
  */
-export function createSpatialHandle(assetId: string, emitters: BasePart[], volume: number): SoundHandle {
+export function createSpatialHandle(assetId: string, emitters: BasePart[], volume: number, looped: boolean, playBackSpeed: number): SoundHandle {
     const player = new Instance("AudioPlayer");
     player.Asset = assetId;
     player.Volume = volume;
     player.Parent = game.GetService("ReplicatedStorage");
+    player.Looping = looped;
+    player.PlaybackSpeed = playBackSpeed;
 
     const emitterInstances: AudioEmitter[] = [];
 
@@ -28,7 +30,7 @@ export function createSpatialHandle(assetId: string, emitters: BasePart[], volum
 
     return {
         play() {
-            player.Play()
+            player.Play();
         },
 
         stop() {
@@ -58,6 +60,10 @@ export function createSpatialHandle(assetId: string, emitters: BasePart[], volum
 
         setTimePosition(timeposition: number) {
             player.TimePosition = timeposition;
+        },
+        
+        setPlayBackSpeed(playbackspeed: number) {
+            player.PlaybackSpeed = playbackspeed;
         }
     };
 }
